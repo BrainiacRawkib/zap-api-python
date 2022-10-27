@@ -65,3 +65,9 @@ target/
 # -------
 .pydevproject
 .project
+
+# virtual environments
+venv/
+
+# Pycharm
+.idea/
