@@ -16,6 +16,7 @@ Author : aine-rb on Github, from Sopra Steria
 """
 
 import argparse
+import sys
 import time
 from pprint import pprint
 from zapv2 import ZAPv2
@@ -32,11 +33,18 @@ def main():
     parser = argparse.ArgumentParser(
         prog="ZAP Zed Attack Proxy Script",
         description="ZAP (Zed Attack Proxy) execution script.")
+
     # positional argument
     parser.add_argument("apiKey", help="API Key", type=str)
-    parser.add_argument("host", help="Targeted host: domain name or ip address", type=str)
+    parser.add_argument("host",
+                        help="Targeted host: domain name or ip address",
+                        type=str)
 
     # optional arguments
+    parser.add_argument("--json_output",
+                        help="return result into a json file",
+                        type=argparse.FileType("w"),
+                        default=sys.stdout)
     parser.add_argument("--zap_sock",
                         help="Zap Socket: Define the listening address and port of ZAP instance",
                         type=str)
@@ -65,6 +73,7 @@ def main():
     target_host = args.host
 
     # optional
+    json_output = args.json_output if args.json_output.endswith('.json') else f'{args.json_output}.json'
     zap_socket = args.zap_sock
     use_proxyChain = args.useProxyChain
     proxy_address = args.proxyAddress
@@ -561,7 +570,9 @@ def main():
     # pprint(core.htmlreport())
 
     print('JSON report:')
-    with open(f'{target_host}.json', 'w') as f:
+    json_output_file = json_output if json_output else target_host
+
+    with open(json_output_file, 'w') as f:
         f.write(core.jsonreport())
 
     # pprint(core.jsonreport())
