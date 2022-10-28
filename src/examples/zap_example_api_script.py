@@ -16,7 +16,6 @@ Author : aine-rb on Github, from Sopra Steria
 """
 
 import argparse
-import sys
 import time
 from pprint import pprint
 from zapv2 import ZAPv2
@@ -43,8 +42,7 @@ def main():
     # optional arguments
     parser.add_argument("--json_output",
                         help="return result into a json file",
-                        type=argparse.FileType("w"),
-                        default=sys.stdout)
+                        type=str)
     parser.add_argument("--zap_sock",
                         help="Zap Socket: Define the listening address and port of ZAP instance",
                         type=str)
@@ -142,7 +140,7 @@ def main():
     # MANDATORY. Determine if context must be configured then used during scans.
     # You have to set this parameter to True if you want that ZAP performs scans
     # from the point of view of a specific user
-    useContextForScan = True
+    useContextForScan = False
 
     # MANDATORY only if useContextForScan is True. Ignored otherwise. Set value to
     # True to define a new context. Set value to False to use an existing one.
@@ -236,9 +234,7 @@ def main():
     if other_urls:
         applicationURL = other_urls.split(',')
     else:
-        applicationURL = ['http://localhost:8081/WebGoat/start.mvc',
-                          'http://localhost:8081/WebGoat/welcome.mvc',
-                          'http://localhost:8081/WebGoat/attack']
+        applicationURL = []
 
     # MANDATORY. Set value to True if you want to customize and use a scan policy
     useScanPolicy = True
